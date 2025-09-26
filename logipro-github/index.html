@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="LogiPro - Sistema Completo de Gest√£o de Transportes">
+    <meta name="keywords" content="transporte, log√≠stica, gest√£o, fretes, frotas">
+    <title>LogiPro - Sistema de Gest√£o de Transportes</title>
+ECHO est† desativado.
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+ECHO est† desativado.
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+ECHO est† desativado.
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+ECHO est† desativado.
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+ECHO est† desativado.
+        header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+ECHO est† desativado.
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+ECHO est† desativado.
+        .subtitle {
+            font-size: 1.4rem;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+ECHO est† desativado.
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--secondary-color);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+ECHO est† desativado.
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+ECHO est† desativado.
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+ECHO est† desativado.
+        .main-content {
+            display: grid;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+ECHO est† desativado.
+        .card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+ECHO est† desativado.
+        .card:hover {
+            transform: translateY(-5px);
+        }
+ECHO est† desativado.
+        .card h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+ECHO est† desativado.
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+ECHO est† desativado.
+        .feature-item {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+ECHO est† desativado.
+        .feature-item:hover {
+            background: var(--secondary-color);
+            color: white;
+            transform: scale(1.05);
+        }
+ECHO est† desativado.
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+ECHO est† desativado.
+        .feature-item h3 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+ECHO est† desativado.
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+ECHO est† desativado.
+        .checklist li {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.1rem;
+        }
+ECHO est† desativado.
+        .checklist li:last-child {
+            border-bottom: none;
+        }
+ECHO est† desativado.
+        .check-icon {
+            color: var(--success-color);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+ECHO est† desativado.
+        .progress-bar {
+            background: #ecf0f1;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+ECHO est† desativado.
+        .progress-fill {
+            background: linear-gradient(90deg, var(--secondary-color), var(--success-color));
+            height: 100%;
+            width: 85%;
+            border-radius: 4px;
+            animation: progress 2s ease-in-out;
+        }
+ECHO est† desativado.
+        @keyframes progress {
+            from { width: 0%; }
+            to { width: 85%; }
+        }
+ECHO est† desativado.
+        .footer {
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 20px;
+        }
+ECHO est† desativado.
+        .footer h2 {
+            margin-bottom: 15px;
+        }
+ECHO est† desativado.
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+ECHO est† desativado.
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+        }
+ECHO est† desativado.
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            header { padding: 25px; }
+            .logo { font-size: 2rem; }
+            .subtitle { font-size: 1.1rem; }
+            .features-grid { grid-template-columns: 1fr; }
+            .contact-info { flex-direction: column; gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">üöõ LogiPro</div>
+            <div class="subtitle">Sistema Completo de Gest√£o de Transportes</div>
+            <div class="status-badge">
+                <span>üîß Sistema em Atualiza√ß√£o</span>
+                <div class="spinner"></div>
+            </div>
+        </header>
+ECHO est† desativado.
+        <div class="main-content">
+            <div class="card">
+                <h2>‚ú® Novidades em Desenvolvimento</h2>
+                <p>Estamos preparando uma vers√£o revolucion√°ria do LogiPro com recursos avan√ßados de IA e automa√ß√£o inteligente.</p>
+ECHO est† desativado.
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <p><strong>Progresso: 85% conclu√≠do</strong></p>
+ECHO est† desativado.
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <span class="feature-icon">üìä</span>
+                        <h3>Dashboard Inteligente</h3>
+                        <p>An√°lises em tempo real com IA</p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">üöö</span>
+                        <h3>Gest√£o de Frota 4.0</h3>
+                        <p>Rastreamento e manuten√ß√£o inteligente</p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">üí∞</span>
+                        <h3>Financeiro Automatizado</h3>
+                        <p>Controle total de custos e receitas</p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">üì±</span>
+                        <h3>App Mobile Nativo</h3>
+                        <p>Acesso completo em qualquer lugar</p>
+                    </div>
+                </div>
+            </div>
+ECHO est† desativado.
+            <div class="card">
+                <h2>üéØ Funcionalidades Principais</h2>
+                <ul class="checklist">
+                    <li>
+                        <span class="check-icon">‚úÖ</span>
+                        <span><strong>Gest√£o Completa de Fretes</strong> - Controle desde a cota√ß√£o at√© a entrega</span>
+                    </li>
+                    <li>
+                        <span class="check-icon">‚úÖ</span>
+                        <span><strong>Manuten√ß√£o Inteligente</strong> - Agendamentos autom√°ticos e hist√≥rico detalhado</span>
+                    </li>
+                    <li>
+                        <span class="check-icon">‚úÖ</span>
+                        <span><strong>Relat√≥rios Avan√ßados</strong> - Insights poderosos para tomada de decis√£o</span>
+                    </li>
+                    <li>
+                        <span class="check-icon">‚úÖ</span>
+                        <span><strong>Gest√£o de Motoristas</strong> - CNH, documentos e performance tracking</span>
+                    </li>
+                    <li>
+                        <span class="check-icon">‚úÖ</span>
+                        <span><strong>Dashboard Executivo</strong> - Vis√£o 360¬∞ do neg√≥cio em tempo real</span>
+                    </li>
+                    <li>
+                        <span class="check-icon">‚úÖ</span>
+                        <span><strong>Integra√ß√£o Cont√°bil</strong> - Sincroniza√ß√£o autom√°tica com sistemas fiscais</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+ECHO est† desativado.
+        <div class="footer">
+            <h2>üåü LogiPro - O Futuro da Gest√£o de Transportes</h2>
+            <p>Tecnologia de ponta para revolucionar seu neg√≥cio</p>
+ECHO est† desativado.
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span>üåê</span>
+                    <span>Site hospedado no GitHub Pages</span>
+                </div>
+                <div class="contact-item">
+                    <span>‚ö°</span>
+                    <span>Performance e Confiabilidade M√°xima</span>
+                </div>
+                <div class="contact-item">
+                    <span>üîí</span>
+                    <span>HTTPS Seguro Nativo</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
