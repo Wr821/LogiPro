@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RC Transportes - Relatório de Desktops</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            min-height: 100vh; 
+            padding: 20px;
+        }
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            background: white; 
+            border-radius: 15px; 
+            padding: 30px; 
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1); 
+        }
+        .header { 
+            text-align: center; 
+            margin-bottom: 30px; 
+            background: linear-gradient(90deg, #2563eb, #3b82f6); 
+            color: white; 
+            padding: 20px; 
+            border-radius: 10px; 
+        }
+        .stats-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 20px; 
+            margin: 20px 0; 
+        }
+        .stat-card { 
+            background: #f8fafc; 
+            border: 1px solid #e2e8f0; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+        }
+        .stat-number { 
+            font-size: 2em; 
+            font-weight: bold; 
+            color: #2563eb; 
+        }
+        .stat-label { 
+            color: #64748b; 
+            margin-top: 5px; 
+        }
+        .desktop-table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin: 20px 0; 
+            background: white;
+        }
+        .desktop-table th, .desktop-table td { 
+            border: 1px solid #e2e8f0; 
+            padding: 12px; 
+            text-align: left; 
+        }
+        .desktop-table th { 
+            background: #f1f5f9; 
+            font-weight: bold; 
+            color: #334155;
+        }
+        .status-online { 
+            color: #10b981; 
+            font-weight: bold; 
+        }
+        .status-offline { 
+            color: #ef4444; 
+            font-weight: bold; 
+        }
+        .refresh-btn { 
+            background: #2563eb; 
+            color: white; 
+            padding: 12px 24px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            margin: 10px 5px;
+        }
+        .refresh-btn:hover { 
+            background: #1d4ed8; 
+        }
+        .auto-refresh { 
+            background: #10b981; 
+        }
+        .auto-refresh.active { 
+            background: #059669; 
+        }
+        .last-update { 
+            text-align: center; 
+            color: #64748b; 
+            margin: 20px 0; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚛 RC Transportes</h1>
+            <p>Relatório de Desktops Conectados</p>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalDesktops">0</div>
+                <div class="stat-label">Total de Desktops</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="onlineDesktops">0</div>
+                <div class="stat-label">Desktops Online</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="serverUptime">0</div>
+                <div class="stat-label">Uptime do Servidor</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="activeConnections">0</div>
+                <div class="stat-label">Conexões Ativas</div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin: 20px 0;">
+            <button class="refresh-btn" onclick="loadReport()">🔄 Atualizar</button>
+            <button class="refresh-btn auto-refresh" id="autoRefreshBtn" onclick="toggleAutoRefresh()">
+                ⏱️ Auto-Refresh: OFF
+            </button>
+        </div>
+        
+        <div class="last-update" id="lastUpdate">
+            Carregando dados...
+        </div>
+        
+        <table class="desktop-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Endereço IP</th>
+                    <th>Status</th>
+                    <th>Conectado em</th>
+                    <th>Última Atividade</th>
+                    <th>Tempo Ativo</th>
+                </tr>
+            </thead>
+            <tbody id="desktopTableBody">
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 20px;">
+                        Carregando dados dos desktops...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div style="background: #f8fafc; padding: 15px; border-radius: 8px; margin-top: 20px;">
+            <h3>📊 Informações do Servidor</h3>
+            <p><strong>IP do Servidor:</strong> <span id="serverIP">172.168.1.251</span></p>
+            <p><strong>Porta:</strong> <span id="serverPort">3001</span></p>
+            <p><strong>URL de Acesso:</strong> <span id="serverURL">http://172.168.1.251:3001</span></p>
+        </div>
+    </div>
+    
+    <script>
+        let autoRefreshInterval = null;
+        let isAutoRefreshActive = false;
+        
+        async function loadReport() {
+            try {
+                const response = await fetch('/api/desktops/report');
+                const data = await response.json();
+                
+                // Atualizar estatísticas
+                document.getElementById('totalDesktops').textContent = data.summary.totalDesktops;
+                document.getElementById('onlineDesktops').textContent = data.summary.onlineDesktops;
+                document.getElementById('serverUptime').textContent = formatUptime(data.summary.serverUptime);
+                document.getElementById('activeConnections').textContent = data.networkInfo.activeConnections;
+                
+                // Atualizar informações do servidor
+                document.getElementById('serverIP').textContent = data.networkInfo.serverIP;
+                document.getElementById('serverPort').textContent = data.networkInfo.serverPort;
+                document.getElementById('serverURL').textContent = `http://${data.networkInfo.serverIP}:${data.networkInfo.serverPort}`;
+                
+                // Atualizar tabela de desktops
+                const tbody = document.getElementById('desktopTableBody');
+                if (data.desktops.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 20px; color: #64748b;">
+                                Nenhum desktop conectado no momento
+                            </td>
+                        </tr>
+                    `;
+                } else {
+                    tbody.innerHTML = data.desktops.map(desktop => `
+                        <tr>
+                            <td>${desktop.id}...</td>
+                            <td>${desktop.ip}</td>
+                            <td class="status-${desktop.status}">${desktop.status.toUpperCase()}</td>
+                            <td>${new Date(desktop.connectedAt).toLocaleString('pt-BR')}</td>
+                            <td>${new Date(desktop.lastSeen).toLocaleString('pt-BR')}</td>
+                            <td>${desktop.uptimeFormatted}</td>
+                        </tr>
+                    `).join('');
+                }
+                
+                // Atualizar timestamp
+                document.getElementById('lastUpdate').textContent = 
+                    `Última atualização: ${new Date().toLocaleString('pt-BR')}`;
+                    
+            } catch (error) {
+                console.error('Erro ao carregar relatório:', error);
+                document.getElementById('lastUpdate').textContent = 
+                    `Erro ao carregar dados: ${error.message}`;
+            }
+        }
+        
+        function toggleAutoRefresh() {
+            const btn = document.getElementById('autoRefreshBtn');
+            
+            if (isAutoRefreshActive) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
+                isAutoRefreshActive = false;
+                btn.textContent = '⏱️ Auto-Refresh: OFF';
+                btn.classList.remove('active');
+            } else {
+                autoRefreshInterval = setInterval(loadReport, 10000); // 10 segundos
+                isAutoRefreshActive = true;
+                btn.textContent = '⏱️ Auto-Refresh: ON';
+                btn.classList.add('active');
+            }
+        }
+        
+        function formatUptime(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            return `${hours}h ${minutes}m ${secs}s`;
+        }
+        
+        // Carregar dados inicial
+        window.addEventListener('load', loadReport);
+    </script>
+</body>
+</html>
